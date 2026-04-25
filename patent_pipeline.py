@@ -66,7 +66,7 @@ EXCLUDE_KEYWORDS = [
     'mcafee', 'fortinet', 'shell', 'bp', 'exxon', 'john deere', 'basf',
     'bayer', 'syngenta', 'monsanto', 'cargill', 'openai', 'lg electronics',
     'ericsson', 'nokia', 'bank', 'insurance', 'financial services', 'telecom',
-    'netflix', 'univ'
+    'netflix', 'univ', 'lenovo', 'kaspersky'
 ]
 
 SECTOR_KEYWORDS = {
@@ -306,6 +306,8 @@ def load_and_prescore(input_path: str, max_patents: int = 30) -> pd.DataFrame:
 
     grouped['AI_score'] = None
     grouped['Message'] = None
+    grouped['Website'] = None
+    grouped['LinkedIn'] = None
 
     grouped = grouped.sort_values('Prescore', ascending=False)
 
@@ -358,15 +360,35 @@ async def ai_score_company_async(
         print(f"   RAG: {len(rag_cases)} case(s) retrieved.")
 
     # 🔹 3. Web-поиск информации о компании
-    research_prompt = f'Research company: "{company_name}". Return concise summary.'
+    research_prompt = f'Research company: "{company_name}". Return JSON: {{"summary": "concise summary", "website": "official website URL or null", "linkedin": "LinkedIn URL or null"}}'
+    website = None
+    linkedin = None
     try:
         completion = client.chat.completions.create(
-            model="gpt-4o-mini-search-preview",
+            model="gpt-4o-search-preview",
             web_search_options={"user_location": {"type": "approximate", "approximate": {"country": "US"}}},
-            messages=[{"role": "user", "content": research_prompt}]
+            messages=[
+                {"role": "system", "content": "You must respond with valid JSON only, no additional text or explanations."},
+                {"role": "user", "content": research_prompt}
+            ]
         )
         web_info = completion.choices[0].message.content
-        context_for_scoring = f"Web: {web_info[:800]}\nPatents: {patent_text[:800]}" if "NO_INFO_FOUND" not in web_info else f"Patents: {patent_text[:1200]}"
+        try:
+            # Extract JSON from the response (GPT may add extra text)
+            start = web_info.find('{')
+            end = web_info.rfind('}') + 1
+            if start != -1 and end > start:
+                json_str = web_info[start:end]
+                parsed = json.loads(json_str)
+                summary = parsed.get("summary", "")
+                website = parsed.get("website") if parsed.get("website") and parsed.get("website") != "null" else None
+                linkedin = parsed.get("linkedin") if parsed.get("linkedin") and parsed.get("linkedin") != "null" else None
+                context_for_scoring = f"Web: {summary[:800]}\nPatents: {patent_text[:800]}" if summary else f"Patents: {patent_text[:1200]}"
+            else:
+                raise json.JSONDecodeError("No JSON found", web_info, 0)
+        except json.JSONDecodeError:
+            print(f"   Web Search failed to parse JSON: {web_info[:200]}...")
+            context_for_scoring = f"Patents: {patent_text[:1200]}"
     except Exception as e:
         print(f"   Web Search failed: {e}")
         context_for_scoring = f"Patents only: {patent_text[:1200]}"
@@ -383,7 +405,7 @@ CONTEXT: {context_for_scoring}
 TASK: Score potential for selling software dev services (1-10).
 
 RULES:
-- 1-3: No fit (university, giant, non-tech, or no similarity to RAG cases)
+- 1-3: No fit (university or giant or non-tech or no similarity to RAG cases)
 - 4-6: Maybe (relevant industry, but weak tech match or unclear outsourcing need)
 - 7-8: Good fit (product company in target sector, modern tech stack)
 - 9-10: Perfect fit (very similar to one of the RAG cases above)
@@ -408,7 +430,7 @@ Return JSON ONLY:
 
         lead_message = ""
 
-        return {"ai_score": ai_score, "industry": result.get("industry", ""), "tech_stack": tech_stack, "recommendation": result.get("recommendation", ""), "message": lead_message}
+        return {"ai_score": ai_score, "industry": result.get("industry", ""), "tech_stack": tech_stack, "recommendation": result.get("recommendation", ""), "message": lead_message, "website": website, "linkedin": linkedin}
 
     except Exception as e:
         print(f"   Scoring error: {e}")

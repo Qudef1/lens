@@ -97,7 +97,7 @@ async def score_single_company_async_wrapper(idx: int, row: pd.Series) -> Dict:
     industry = row.get('Industry', '')
     patent_text = f"Titles: {row.get('Title', '')}\nAbstracts: {row.get('Abstract', '')}"
     result = await ai_score_company_async(company_name, industry, patent_text)
-    return {'idx': idx, 'ai_score': result.get('ai_score', 0), 'message': result.get('message', ''), 'industry': result.get('industry', '')}
+    return {'idx': idx, 'ai_score': result.get('ai_score', 0), 'message': result.get('message', ''), 'industry': result.get('industry', ''), 'website': result.get('website'), 'linkedin': result.get('linkedin')}
 
 def score_single_company(idx: int, row: pd.Series) -> Dict:
     coro = score_single_company_async_wrapper(idx, row)
@@ -176,6 +176,10 @@ if st.session_state.prescored_df is not None:
                 st.session_state.prescored_df.at[idx, 'Message'] = result['message']
                 if result['industry']:
                     st.session_state.prescored_df.at[idx, 'Industry'] = result['industry']
+                if result.get('website'):
+                    st.session_state.prescored_df.at[idx, 'Website'] = result['website']
+                if result.get('linkedin'):
+                    st.session_state.prescored_df.at[idx, 'LinkedIn'] = result['linkedin']
                 with log_container:
                     st.write(f"   ✅ Score: {result['ai_score']}/10")
             except Exception as e:
@@ -202,6 +206,10 @@ if st.session_state.prescored_df is not None:
         base_columns.insert(3, 'Date_of_latest_publication')
     if 'Message' in df_display.columns:
         base_columns.append('Message')
+    if 'Website' in df_display.columns:
+        base_columns.append('Website')
+    if 'LinkedIn' in df_display.columns:
+        base_columns.append('LinkedIn')
     for col in base_columns:
         if col not in df_display.columns:
             df_display[col] = None
@@ -212,6 +220,8 @@ if st.session_state.prescored_df is not None:
         column_config={
             "AI_score": st.column_config.NumberColumn("AI Score", format="%d/10", min_value=0, max_value=10),
             "Prescore": st.column_config.NumberColumn("Pre-Score", format="%d"),
+            "Website": st.column_config.LinkColumn("Website"),
+            "LinkedIn": st.column_config.LinkColumn("LinkedIn"),
         }
     )
 
@@ -242,6 +252,10 @@ if st.session_state.prescored_df is not None:
                                 st.session_state.prescored_df.at[idx, 'Message'] = result['message']
                                 if result['industry']:
                                     st.session_state.prescored_df.at[idx, 'Industry'] = result['industry']
+                                if result.get('website'):
+                                    st.session_state.prescored_df.at[idx, 'Website'] = result['website']
+                                if result.get('linkedin'):
+                                    st.session_state.prescored_df.at[idx, 'LinkedIn'] = result['linkedin']
                                 save_state()
                                 st.success(f"Score: {result['ai_score']}/10")
                                 st.rerun()
