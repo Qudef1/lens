@@ -97,7 +97,7 @@ async def score_single_company_async_wrapper(idx: int, row: pd.Series) -> Dict:
     industry = row.get('Industry', '')
     patent_text = f"Titles: {row.get('Title', '')}\nAbstracts: {row.get('Abstract', '')}"
     result = await ai_score_company_async(company_name, industry, patent_text)
-    return {'idx': idx, 'ai_score': result.get('ai_score', 0), 'message': result.get('message', '')}
+    return {'idx': idx, 'ai_score': result.get('ai_score', 0), 'message': result.get('message', ''), 'industry': result.get('industry', '')}
 
 def score_single_company(idx: int, row: pd.Series) -> Dict:
     coro = score_single_company_async_wrapper(idx, row)
@@ -143,16 +143,19 @@ if st.sidebar.button('Run Pre-scoring', type='primary'):
                 st.error(f'❌ Error during pre-scoring: {str(e)}')
                 st.code(f"Available columns: {list(pd.read_csv(uploaded_file, nrows=1).columns)}")
 
-st.sidebar.markdown('---')
-st.sidebar.header('2. AI Scoring')
 
 st.sidebar.markdown('---')
-st.sidebar.header('3. Display Options')
+st.sidebar.header('2. Display Options and analyze')
 top_n = st.sidebar.number_input('Top companies to display (0 for all)', min_value=0, value=0)
 
 if st.session_state.prescored_df is not None:
-    if st.sidebar.button('Analyze Full with AI', type='primary'):
-        df = st.session_state.prescored_df.copy()
+    if st.sidebar.button('Analyze Top Companies with AI', type='primary'):
+        df_display_for_ai = st.session_state.prescored_df.copy()
+        if 'Prescore' in df_display_for_ai.columns:
+            df_display_for_ai = df_display_for_ai.sort_values('Prescore', ascending=False)
+        if top_n > 0:
+            df_display_for_ai = df_display_for_ai.head(top_n)
+        df = df_display_for_ai
         progress_bar = st.progress(0)
         status_text = st.empty()
         log_container = st.expander('AI Scoring Log', expanded=False)
@@ -171,6 +174,8 @@ if st.session_state.prescored_df is not None:
                     st.session_state.prescored_df['Message'] = None
                 st.session_state.prescored_df.at[idx, 'AI_score'] = result['ai_score']
                 st.session_state.prescored_df.at[idx, 'Message'] = result['message']
+                if result['industry']:
+                    st.session_state.prescored_df.at[idx, 'Industry'] = result['industry']
                 with log_container:
                     st.write(f"   ✅ Score: {result['ai_score']}/10")
             except Exception as e:
@@ -180,7 +185,7 @@ if st.session_state.prescored_df is not None:
             time.sleep(0.5)
         save_state()
         status_text.text('✨ AI scoring complete!')
-        st.success('All companies scored!')
+        st.success(f'{"Top" if top_n > 0 else "All"} companies scored!')
         st.rerun()
 
 # ==================== Отображение результатов ====================
@@ -211,7 +216,7 @@ if st.session_state.prescored_df is not None:
     )
 
     st.subheader('Individual AI Scoring')
-    for idx, row in st.session_state.prescored_df.iterrows():
+    for idx, row in df_display.iterrows():
         with st.container(border=True):
             col1, col2, col3, col4, col5 = st.columns([3, 2, 1, 1, 2])
             with col1:
@@ -235,6 +240,8 @@ if st.session_state.prescored_df is not None:
                                 result = score_single_company(idx, row)
                                 st.session_state.prescored_df.at[idx, 'AI_score'] = result['ai_score']
                                 st.session_state.prescored_df.at[idx, 'Message'] = result['message']
+                                if result['industry']:
+                                    st.session_state.prescored_df.at[idx, 'Industry'] = result['industry']
                                 save_state()
                                 st.success(f"Score: {result['ai_score']}/10")
                                 st.rerun()

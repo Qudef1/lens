@@ -361,7 +361,7 @@ async def ai_score_company_async(
     research_prompt = f'Research company: "{company_name}". Return concise summary.'
     try:
         completion = client.chat.completions.create(
-            model="gpt-4o-search-preview",
+            model="gpt-4o-mini-search-preview",
             web_search_options={"user_location": {"type": "approximate", "approximate": {"country": "US"}}},
             messages=[{"role": "user", "content": research_prompt}]
         )
@@ -406,9 +406,7 @@ Return JSON ONLY:
         tech_stack = ", ".join(result.get("tech_stack", [])[:5])
         ai_score = result.get("ai_score", 0)
 
-        lead_message = await generate_lead_message_async(
-            company_name, result.get("industry", ""), tech_stack, ai_score, rag_cases
-        )
+        lead_message = ""
 
         return {"ai_score": ai_score, "industry": result.get("industry", ""), "tech_stack": tech_stack, "recommendation": result.get("recommendation", ""), "message": lead_message}
 
@@ -417,60 +415,60 @@ Return JSON ONLY:
         return {"ai_score": 0, "industry": "Unknown", "tech_stack": "", "recommendation": f"Error: {str(e)[:100]}", "message": ""}
 
 
-async def generate_lead_message_async(
-    company_name: str,
-    industry: str,
-    tech_stack: str,
-    ai_score: int,
-    rag_cases: Optional[List[Dict]] = None,
-) -> str:
-    if rag_cases:
-        cases_context = "\n\n".join([
-            f"- {c.get('title', 'Unknown')} [{c.get('industry', [])}]: {c.get('body', '')[:250].strip()}"
-            for c in rag_cases
-        ])
-        retrieval_note = f"Relevant case(s) from our portfolio:\n{cases_context}\n\n"
-    else:
-        retrieval_note = ""
+# async def generate_lead_message_async(
+#     company_name: str,
+#     industry: str,
+#     tech_stack: str,
+#     ai_score: int,
+#     rag_cases: Optional[List[Dict]] = None,
+# ) -> str:
+#     if rag_cases:
+#         cases_context = "\n\n".join([
+#             f"- {c.get('title', 'Unknown')} [{c.get('industry', [])}]: {c.get('body', '')[:250].strip()}"
+#             for c in rag_cases
+#         ])
+#         retrieval_note = f"Relevant case(s) from our portfolio:\n{cases_context}\n\n"
+#     else:
+#         retrieval_note = ""
 
-    score_band = "premium" if ai_score >= 8 else ("promising" if ai_score >= 6 else "speculative")
-    tone = "enthusiastic" if ai_score >= 8 else "warm and professional"
+#     score_band = "premium" if ai_score >= 8 else ("promising" if ai_score >= 6 else "speculative")
+#     tone = "enthusiastic" if ai_score >= 8 else "warm and professional"
 
-    prompt = f"""You are a B2B outreach writer at Interexy — a premium software development company (outstaffing/custom dev).
+#     prompt = f"""You are a B2B outreach writer at Interexy — a premium software development company (outstaffing/custom dev).
 
-Write a personalized outreach message for a potential client.
+# Write a personalized outreach message for a potential client.
 
-=== TARGET COMPANY ===
-Name: {company_name}
-Industry: {industry}
-Tech Stack: {tech_stack}
-Score Band: {score_band}
+# === TARGET COMPANY ===
+# Name: {company_name}
+# Industry: {industry}
+# Tech Stack: {tech_stack}
+# Score Band: {score_band}
 
-=== OUR SUCCESSFUL CASES ===
-{retrieval_note if retrieval_note else "No highly relevant cases found — use your general knowledge of Interexy's expertise in modern tech stacks."}
+# === OUR SUCCESSFUL CASES ===
+# {retrieval_note if retrieval_note else "No highly relevant cases found — use your general knowledge of Interexy's expertise in modern tech stacks."}
 
-=== MESSAGE REQUIREMENTS ===
-1. Friendly greeting, short and direct (under 200 words total).
-2. Compliment the company's work — reference their specific industry and tech achievements.
-3. If you have case references from above, mention them with concrete outcomes.
-   If no strong match exists, reference a relevant Interexy specialty instead.
-4. End with a clear, confident offer to help bring their idea to life.
-5. Tone: {tone}.
+# # === MESSAGE REQUIREMENTS ===
+# 1. Friendly greeting, short and direct (under 200 words total).
+# 2. Compliment the company's work — reference their specific industry and tech achievements.
+# 3. If you have case references from above, mention them with concrete outcomes.
+#     If no strong match exists, reference a relevant Interexy specialty instead.
+# 4. End with a clear, confident offer to help bring their idea to life.
+# 5. Tone: {tone}.
 
-=== OUTPUT ===
-Return ONLY the message text, no labels, no JSON, just the message itself."""
+# === OUTPUT ===
+# Return ONLY the message text, no labels, no JSON, just the message itself."""
 
-    try:
-        response = client.chat.completions.create(
-            model="gpt-4o-mini",
-            messages=[{"role": "user", "content": prompt}],
-            temperature=0.7,
-            max_tokens=300,
-        )
-        return response.choices[0].message.content.strip()
-    except Exception as e:
-        print(f"   Message generation failed: {e}")
-        return ""
+#     try:
+#         response = client.chat.completions.create(
+#             model="gpt-4o-mini",
+#             messages=[{"role": "user", "content": prompt}],
+#             temperature=0.7,
+#             max_tokens=300,
+#         )
+#         return response.choices[0].message.content.strip()
+#     except Exception as e:
+#         print(f"   Message generation failed: {e}")
+#         return ""
 
 
 def ai_score_company(company_name: str, industry: str, patent_text: str) -> Dict:
