@@ -49,24 +49,222 @@ COMMON_SUFFIXES = [
 ]
 
 EXCLUDE_KEYWORDS = [
+    # === Университеты и научные учреждения ===
     'university', 'institute', 'college', 'academy', 'foundation',
     'hospital', 'clinic', 'health system', 'laboratory', 'research center',
     'department', 'ministry', 'agency', 'government', 'nasa', 'darpa',
     'nih', 'nist', 'fraunhofer', 'mit', 'stanford', 'harvard', 'oxford',
-    'eth', 'samsung', 'philips', 'siemens', 'medtronic', 'johnson', 'abbott',
+    'eth', 'caltech', 'princeton', 'yale', 'columbia', 'cornell', 'uchicago',
+    'berkeley', 'ucla', 'usc', 'nyu', 'duke', 'northwestern', 'upenn',
+    'tsinghua', 'peking university', 'fudan', 'zhejiang university',
+    'shanghai jiao tong', 'ustc', 'nanjing university', 'wuhan university',
+    
+    # === Индивидуальные изобретатели: английские имена (частые) ===
+    'john smith', 'james smith', 'robert smith', 'michael smith', 'william smith',
+    'david smith', 'richard smith', 'joseph smith', 'thomas smith', 'charles smith',
+    'john johnson', 'james johnson', 'robert johnson', 'michael johnson',
+    'john williams', 'james williams', 'robert williams', 'michael williams',
+    'john brown', 'james brown', 'robert brown', 'michael brown',
+    'john jones', 'james jones', 'robert jones', 'michael jones',
+    'john miller', 'james miller', 'robert miller', 'michael miller',
+    'john davis', 'james davis', 'robert davis', 'michael davis',
+    'john garcia', 'james garcia', 'robert garcia', 'michael garcia',
+    'john rodriguez', 'james rodriguez', 'robert rodriguez',
+    'john martinez', 'james martinez', 'robert martinez',
+    'john hernandez', 'james hernandez', 'robert hernandez',
+    'john lopez', 'james lopez', 'robert lopez',
+    'john gonzalez', 'james gonzalez', 'robert gonzalez',
+    'john wilson', 'james wilson', 'robert wilson', 'michael wilson',
+    'john anderson', 'james anderson', 'robert anderson',
+    'john taylor', 'james taylor', 'robert taylor', 'michael taylor',
+    'john thomas', 'james thomas', 'robert thomas', 'michael thomas',
+    'john moore', 'james moore', 'robert moore', 'michael moore',
+    'john jackson', 'james jackson', 'robert jackson',
+    'john martin', 'james martin', 'robert martin', 'michael martin',
+    'john lee', 'james lee', 'robert lee', 'michael lee',
+    'john perez', 'james perez', 'robert perez',
+    'john thompson', 'james thompson', 'robert thompson',
+    'john white', 'james white', 'robert white', 'michael white',
+    'john harris', 'james harris', 'robert harris',
+    'john sanchez', 'james sanchez', 'robert sanchez',
+    'john clark', 'james clark', 'robert clark', 'michael clark',
+    'john ramirez', 'james ramirez', 'robert ramirez',
+    'john lewis', 'james lewis', 'robert lewis', 'michael lewis',
+    'john robinson', 'james robinson', 'robert robinson',
+    'john walker', 'james walker', 'robert walker',
+    'john young', 'james young', 'robert young', 'michael young',
+    'john allen', 'james allen', 'robert allen',
+    'john king', 'james king', 'robert king', 'michael king',
+    'john wright', 'james wright', 'robert wright',
+    'john scott', 'james scott', 'robert scott',
+    'john torres', 'james torres', 'robert torres',
+    'john nguyen', 'james nguyen', 'robert nguyen',
+    'john hill', 'james hill', 'robert hill',
+    'john flores', 'james flores', 'robert flores',
+    'john green', 'james green', 'robert green', 'michael green',
+    'john adams', 'james adams', 'robert adams',
+    'john nelson', 'james nelson', 'robert nelson',
+    'john baker', 'james baker', 'robert baker',
+    'john hall', 'james hall', 'robert hall',
+    'john rivera', 'james rivera', 'robert rivera',
+    'john campbell', 'james campbell', 'robert campbell',
+    'john mitchell', 'james mitchell', 'robert mitchell',
+    'john carter', 'james carter', 'robert carter',
+    'john roberts', 'james roberts', 'robert roberts',
+    'john gomez', 'james gomez', 'robert gomez',
+    'john phillips', 'james phillips', 'robert phillips',
+    'john evans', 'james evans', 'robert evans',
+    'john turner', 'james turner', 'robert turner',
+    'john diaz', 'james diaz', 'robert diaz',
+    'john parker', 'james parker', 'robert parker',
+    'john cruz', 'james cruz', 'robert cruz',
+    'john edwards', 'james edwards', 'robert edwards',
+    'john collins', 'james collins', 'robert collins',
+    'john reyes', 'james reyes', 'robert reyes',
+    'john stewart', 'james stewart', 'robert stewart',
+    'john morris', 'james morris', 'robert morris',
+    'john morales', 'james morales', 'robert morales',
+    'john murphy', 'james murphy', 'robert murphy',
+    'john cook', 'james cook', 'robert cook',
+    'john rogers', 'james rogers', 'robert rogers',
+    'john gutierrez', 'james gutierrez', 'robert gutierrez',
+    'john ortiz', 'james ortiz', 'robert ortiz',
+    'john morgan', 'james morgan', 'robert morgan',
+    'john cooper', 'james cooper', 'robert cooper',
+    'john peterson', 'james peterson', 'robert peterson',
+    'john bailey', 'james bailey', 'robert bailey',
+    'john reed', 'james reed', 'robert reed',
+    'john kelly', 'james kelly', 'robert kelly',
+    'john howard', 'james howard', 'robert howard',
+    'john ramos', 'james ramos', 'robert ramos',
+    'john kim', 'james kim', 'robert kim',
+    'john cox', 'james cox', 'robert cox',
+    'john ward', 'james ward', 'robert ward',
+    'john richardson', 'james richardson', 'robert richardson',
+    'john watson', 'james watson', 'robert watson',
+    'john brooks', 'james brooks', 'robert brooks',
+    'john chavez', 'james chavez', 'robert chavez',
+    'john wood', 'james wood', 'robert wood',
+    'john james', 'james james', 'robert james',
+    'john bennett', 'james bennett', 'robert bennett',
+    'john gray', 'james gray', 'robert gray',
+    'john mendoza', 'james mendoza', 'robert mendoza',
+    'john ruiz', 'james ruiz', 'robert ruiz',
+    'john hughes', 'james hughes', 'robert hughes',
+    'john price', 'james price', 'robert price',
+    'john alvarez', 'james alvarez', 'robert alvarez',
+    'john castillo', 'james castillo', 'robert castillo',
+    'john sanders', 'james sanders', 'robert sanders',
+    'john patel', 'james patel', 'robert patel',
+    'john myers', 'james myers', 'robert myers',
+    'john long', 'james long', 'robert long',
+    'john ross', 'james ross', 'robert ross',
+    'john foster', 'james foster', 'robert foster',
+    'john jimenez', 'james jimenez', 'robert jimenez',
+    
+    # === Индивидуальные изобретатели: китайские фамилии (пиньинь) ===
+    'li wei', 'li na', 'li jun', 'li yan', 'li lei', 'li jie', 'li qiang',
+    'li ming', 'li hua', 'li xiu', 'li ying', 'li fang', 'li ping', 'li jing',
+    'wang wei', 'wang na', 'wang jun', 'wang yan', 'wang lei', 'wang jie',
+    'wang qiang', 'wang ming', 'wang hua', 'wang xiu', 'wang ying',
+    'zhang wei', 'zhang na', 'zhang jun', 'zhang yan', 'zhang lei',
+    'zhang jie', 'zhang qiang', 'zhang ming', 'zhang hua', 'zhang xiu',
+    'zhang ying', 'zhang fang', 'zhang ping', 'zhang jing',
+    'liu wei', 'liu na', 'liu jun', 'liu yan', 'liu lei', 'liu jie',
+    'liu qiang', 'liu ming', 'liu hua', 'liu ying',
+    'chen wei', 'chen na', 'chen jun', 'chen yan', 'chen lei',
+    'chen jie', 'chen qiang', 'chen ming', 'chen hua', 'chen ying',
+    'yang wei', 'yang na', 'yang jun', 'yang yan', 'yang lei',
+    'yang jie', 'yang qiang', 'yang ming', 'yang hua', 'yang ying',
+    'huang wei', 'huang na', 'huang jun', 'huang yan', 'huang lei',
+    'huang jie', 'huang qiang', 'huang ming', 'huang hua',
+    'zhao wei', 'zhao na', 'zhao jun', 'zhao yan', 'zhao lei',
+    'zhao jie', 'zhao qiang', 'zhao ming', 'zhao hua',
+    'wu wei', 'wu na', 'wu jun', 'wu yan', 'wu lei',
+    'wu jie', 'wu qiang', 'wu ming', 'wu hua',
+    'zhou wei', 'zhou na', 'zhou jun', 'zhou yan', 'zhou lei',
+    'zhou jie', 'zhou qiang', 'zhou ming', 'zhou hua',
+    'xu wei', 'xu na', 'xu jun', 'xu yan', 'xu lei',
+    'xu jie', 'xu qiang', 'xu ming', 'xu hua',
+    'sun wei', 'sun na', 'sun jun', 'sun yan', 'sun lei',
+    'sun jie', 'sun qiang', 'sun ming', 'sun hua',
+    'ma wei', 'ma na', 'ma jun', 'ma yan', 'ma lei',
+    'ma jie', 'ma qiang', 'ma ming', 'ma hua',
+    'zhu wei', 'zhu na', 'zhu jun', 'zhu yan', 'zhu lei',
+    'zhu jie', 'zhu qiang', 'zhu ming', 'zhu hua',
+    'hu wei', 'hu na', 'hu jun', 'hu yan', 'hu lei',
+    'hu jie', 'hu qiang', 'hu ming', 'hu hua',
+    'guo wei', 'guo na', 'guo jun', 'guo yan', 'guo lei',
+    'guo jie', 'guo qiang', 'guo ming', 'guo hua',
+    'he wei', 'he na', 'he jun', 'he yan', 'he lei',
+    'he jie', 'he qiang', 'he ming', 'he hua',
+    'lin wei', 'lin na', 'lin jun', 'lin yan', 'lin lei',
+    'lin jie', 'lin qiang', 'lin ming', 'lin hua',
+    'gao wei', 'gao na', 'gao jun', 'gao yan', 'gao lei',
+    'gao jie', 'gao qiang', 'gao ming', 'gao hua',
+    
+    # === Индивидуальные изобретатели: общие паттерны ===
+    'individual', 'sole proprietor', 'self-employed', 'freelance', 'consultant',
+    'inventor', 'applicant', 'person', 'private', 'independent',
+    'dr.', 'prof.', 'professor', 'mr.', 'mrs.', 'ms.', 'miss',
+    'et al', 'et al.', 'and others', '& others',
+    
+    # === Крупные корпорации: технологии ===
+    'samsung', 'philips', 'siemens', 'medtronic', 'johnson & johnson', 'abbott',
     'roche', 'baxter', 'general electric', 'schneider', 'abb', 'honeywell',
     'eaton', 'emerson', 'rockwell', 'continental', 'google', 'microsoft',
     'apple', 'amazon', 'ibm', 'intel', 'meta', 'nvidia', 'oracle', 'cisco',
     'salesforce', 'adobe', 'sap', 'qualcomm', 'huawei', 'baidu', 'alibaba',
     'tencent', 'sony', 'panasonic', 'bosch', 'visa', 'mastercard',
-    'american express', 'paypal', 'jpmorgan', 'goldman', 'citibank', 'hsbc',
+    'american express', 'paypal', 'jpmorgan', 'goldman sachs', 'citibank', 'hsbc',
     'fiserv', 'stripe', 'toyota', 'ford', 'bmw', 'volkswagen', 'daimler',
     'waymo', 'tesla', 'uber', 'trimble', 'pfizer', 'novartis', 'astrazeneca',
-    'illumina', 'thermo', 'palo alto networks', 'crowdstrike', 'symantec',
-    'mcafee', 'fortinet', 'shell', 'bp', 'exxon', 'john deere', 'basf',
+    'illumina', 'thermo fisher', 'palo alto networks', 'crowdstrike', 'symantec',
+    'mcafee', 'fortinet', 'shell', 'bp', 'exxonmobil', 'john deere', 'basf',
     'bayer', 'syngenta', 'monsanto', 'cargill', 'openai', 'lg electronics',
-    'ericsson', 'nokia', 'bank', 'insurance', 'financial services', 'telecom',
-    'netflix', 'univ', 'lenovo', 'kaspersky'
+    'ericsson', 'nokia', 'lenovo', 'kaspersky', 'xiaomi', 'oppo', 'vivo',
+    'oneplus', 'realme', 'honor', 'meizu', 'zte', 'hisense', 'tcl', 'haier',
+    'midea', 'gree', 'byd', 'geely', 'great wall motor', 'saic motor',
+    'changan', 'faaw', 'dongfeng', 'brilliance', 'chery', 'lifan',
+    
+    # === Крупные корпорации: финтех/банки ===
+    'bank of america', 'wells fargo', 'us bank', 'pnc', 'capital one',
+    'discover', 'mastercard', 'visa inc', 'square', 'adyen', 'klarna',
+    'ant group', 'wechat pay', 'alipay', 'tenpay', 'unionpay',
+    
+    # === Крупные корпорации: фарм/биотех ===
+    'merck', 'gsk', 'sanofi', 'eli lilly', 'bristol myers squibb',
+    'amgen', 'gilead', 'biogen', 'regeneron', 'vertex', 'moderna',
+    'biontech', 'curevac', 'takeda', 'eisai', 'astellas', 'daiichi sankyo',
+    'otsuka', 'chugai', 'shionogi', 'sumitomo dainippon', 'kyowa kirin',
+    
+    # === Крупные корпорации: индустрия/энергетика ===
+    'caterpillar', 'komatsu', 'hitachi', 'mitsubishi', 'toshiba', 'fujitsu',
+    'canon', 'nikon', 'olympus', 'ricoh', 'epson', 'brother', 'sharp',
+    'denso', 'aisin', 'jatco', 'borgwarner', 'magna', 'lear', 'aptiv',
+    'valeo', 'faurecia', 'plastic omnium', 'bosch rexroth', 'parker hannifin',
+    
+    # === Крупные корпорации: консалтинг/услуги ===
+    'accenture', 'deloitte', 'pwc', 'ey', 'kpmg', 'mckinsey', 'bcg', 'bain',
+    'ibm consulting', 'cognizant', 'infosys', 'tcs', 'wipro', 'hcl',
+    
+    # === Паттерны, указывающие на не-стартапы ===
+    'holdings', 'group', 'corporation', 'incorporated', 'plc', 'limited',
+    'public company', 'listed company', 'fortune 500', 's&p 500',
+    'subsidiary', 'affiliate', 'joint venture', 'consortium', 'alliance',
+    
+    # === Отрасли, которые мы не таргетируем ===
+    'bank', 'banking', 'insurance', 'financial services', 'telecom',
+    'telecommunications', 'utility', 'utilities', 'power plant', 'oil',
+    'gas', 'petroleum', 'mining', 'agriculture', 'farming', 'retail',
+    'supermarket', 'department store', 'e-commerce platform', 'marketplace',
+    'social media', 'search engine', 'cloud provider', 'data center',
+    
+    # === Дополнительные исключения для индивидуалов ===
+    'ltd.', 'llc', 'llp', 'gmbh', 'ag', 'sa', 's.a.', 'sarl', 'bv',
+    'pty', 'sp z o o', 'sp zoo', 'sas', 's.r.l.', 'srl', 'corp.',
+    'co.', 'co,', 'company', 'inc.', '& co', 'and co', 'associates',
+    'partners', 'partnership', 'lp', 'lllp',
 ]
 
 SECTOR_KEYWORDS = {
@@ -360,12 +558,12 @@ async def ai_score_company_async(
         print(f"   RAG: {len(rag_cases)} case(s) retrieved.")
 
     # 🔹 3. Web-поиск информации о компании
-    research_prompt = f'Research company: "{company_name}". Return JSON: {{"summary": "concise summary", "website": "official website URL or null", "linkedin": "LinkedIn URL or null"}}'
+    research_prompt = f'Research company: "{company_name}". They managed to make patent {patent_text[:400]}. In summary return information about the company and IT-fields (application development, web-dev, ml, etc.) where the company operates. Be very strict about the company`s achievements. Return only accurate information.  Return only in JSON format: {{"summary": "concise summary", "website": "official website URL or null", "linkedin": "LinkedIn URL or null"}}'
     website = None
     linkedin = None
     try:
         completion = client.chat.completions.create(
-            model="gpt-4o-search-preview",
+            model="gpt-4o-mini-search-preview",
             web_search_options={"user_location": {"type": "approximate", "approximate": {"country": "US"}}},
             messages=[
                 {"role": "system", "content": "You must respond with valid JSON only, no additional text or explanations."},
@@ -373,6 +571,7 @@ async def ai_score_company_async(
             ]
         )
         web_info = completion.choices[0].message.content
+        print(web_info)
         try:
             # Extract JSON from the response (GPT may add extra text)
             start = web_info.find('{')
@@ -383,7 +582,7 @@ async def ai_score_company_async(
                 summary = parsed.get("summary", "")
                 website = parsed.get("website") if parsed.get("website") and parsed.get("website") != "null" else None
                 linkedin = parsed.get("linkedin") if parsed.get("linkedin") and parsed.get("linkedin") != "null" else None
-                context_for_scoring = f"Web: {summary[:800]}\nPatents: {patent_text[:800]}" if summary else f"Patents: {patent_text[:1200]}"
+                context_for_scoring = f"Web: {summary[:800]}\nPatents: {patent_text[:500]}" if summary else f"Patents: {patent_text[:1200]}"
             else:
                 raise json.JSONDecodeError("No JSON found", web_info, 0)
         except json.JSONDecodeError:
