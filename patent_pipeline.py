@@ -59,156 +59,6 @@ EXCLUDE_KEYWORDS = [
     'tsinghua', 'peking university', 'fudan', 'zhejiang university',
     'shanghai jiao tong', 'ustc', 'nanjing university', 'wuhan university',
     
-    # === Индивидуальные изобретатели: английские имена (частые) ===
-    'john smith', 'james smith', 'robert smith', 'michael smith', 'william smith',
-    'david smith', 'richard smith', 'joseph smith', 'thomas smith', 'charles smith',
-    'john johnson', 'james johnson', 'robert johnson', 'michael johnson',
-    'john williams', 'james williams', 'robert williams', 'michael williams',
-    'john brown', 'james brown', 'robert brown', 'michael brown',
-    'john jones', 'james jones', 'robert jones', 'michael jones',
-    'john miller', 'james miller', 'robert miller', 'michael miller',
-    'john davis', 'james davis', 'robert davis', 'michael davis',
-    'john garcia', 'james garcia', 'robert garcia', 'michael garcia',
-    'john rodriguez', 'james rodriguez', 'robert rodriguez',
-    'john martinez', 'james martinez', 'robert martinez',
-    'john hernandez', 'james hernandez', 'robert hernandez',
-    'john lopez', 'james lopez', 'robert lopez',
-    'john gonzalez', 'james gonzalez', 'robert gonzalez',
-    'john wilson', 'james wilson', 'robert wilson', 'michael wilson',
-    'john anderson', 'james anderson', 'robert anderson',
-    'john taylor', 'james taylor', 'robert taylor', 'michael taylor',
-    'john thomas', 'james thomas', 'robert thomas', 'michael thomas',
-    'john moore', 'james moore', 'robert moore', 'michael moore',
-    'john jackson', 'james jackson', 'robert jackson',
-    'john martin', 'james martin', 'robert martin', 'michael martin',
-    'john lee', 'james lee', 'robert lee', 'michael lee',
-    'john perez', 'james perez', 'robert perez',
-    'john thompson', 'james thompson', 'robert thompson',
-    'john white', 'james white', 'robert white', 'michael white',
-    'john harris', 'james harris', 'robert harris',
-    'john sanchez', 'james sanchez', 'robert sanchez',
-    'john clark', 'james clark', 'robert clark', 'michael clark',
-    'john ramirez', 'james ramirez', 'robert ramirez',
-    'john lewis', 'james lewis', 'robert lewis', 'michael lewis',
-    'john robinson', 'james robinson', 'robert robinson',
-    'john walker', 'james walker', 'robert walker',
-    'john young', 'james young', 'robert young', 'michael young',
-    'john allen', 'james allen', 'robert allen',
-    'john king', 'james king', 'robert king', 'michael king',
-    'john wright', 'james wright', 'robert wright',
-    'john scott', 'james scott', 'robert scott',
-    'john torres', 'james torres', 'robert torres',
-    'john nguyen', 'james nguyen', 'robert nguyen',
-    'john hill', 'james hill', 'robert hill',
-    'john flores', 'james flores', 'robert flores',
-    'john green', 'james green', 'robert green', 'michael green',
-    'john adams', 'james adams', 'robert adams',
-    'john nelson', 'james nelson', 'robert nelson',
-    'john baker', 'james baker', 'robert baker',
-    'john hall', 'james hall', 'robert hall',
-    'john rivera', 'james rivera', 'robert rivera',
-    'john campbell', 'james campbell', 'robert campbell',
-    'john mitchell', 'james mitchell', 'robert mitchell',
-    'john carter', 'james carter', 'robert carter',
-    'john roberts', 'james roberts', 'robert roberts',
-    'john gomez', 'james gomez', 'robert gomez',
-    'john phillips', 'james phillips', 'robert phillips',
-    'john evans', 'james evans', 'robert evans',
-    'john turner', 'james turner', 'robert turner',
-    'john diaz', 'james diaz', 'robert diaz',
-    'john parker', 'james parker', 'robert parker',
-    'john cruz', 'james cruz', 'robert cruz',
-    'john edwards', 'james edwards', 'robert edwards',
-    'john collins', 'james collins', 'robert collins',
-    'john reyes', 'james reyes', 'robert reyes',
-    'john stewart', 'james stewart', 'robert stewart',
-    'john morris', 'james morris', 'robert morris',
-    'john morales', 'james morales', 'robert morales',
-    'john murphy', 'james murphy', 'robert murphy',
-    'john cook', 'james cook', 'robert cook',
-    'john rogers', 'james rogers', 'robert rogers',
-    'john gutierrez', 'james gutierrez', 'robert gutierrez',
-    'john ortiz', 'james ortiz', 'robert ortiz',
-    'john morgan', 'james morgan', 'robert morgan',
-    'john cooper', 'james cooper', 'robert cooper',
-    'john peterson', 'james peterson', 'robert peterson',
-    'john bailey', 'james bailey', 'robert bailey',
-    'john reed', 'james reed', 'robert reed',
-    'john kelly', 'james kelly', 'robert kelly',
-    'john howard', 'james howard', 'robert howard',
-    'john ramos', 'james ramos', 'robert ramos',
-    'john kim', 'james kim', 'robert kim',
-    'john cox', 'james cox', 'robert cox',
-    'john ward', 'james ward', 'robert ward',
-    'john richardson', 'james richardson', 'robert richardson',
-    'john watson', 'james watson', 'robert watson',
-    'john brooks', 'james brooks', 'robert brooks',
-    'john chavez', 'james chavez', 'robert chavez',
-    'john wood', 'james wood', 'robert wood',
-    'john james', 'james james', 'robert james',
-    'john bennett', 'james bennett', 'robert bennett',
-    'john gray', 'james gray', 'robert gray',
-    'john mendoza', 'james mendoza', 'robert mendoza',
-    'john ruiz', 'james ruiz', 'robert ruiz',
-    'john hughes', 'james hughes', 'robert hughes',
-    'john price', 'james price', 'robert price',
-    'john alvarez', 'james alvarez', 'robert alvarez',
-    'john castillo', 'james castillo', 'robert castillo',
-    'john sanders', 'james sanders', 'robert sanders',
-    'john patel', 'james patel', 'robert patel',
-    'john myers', 'james myers', 'robert myers',
-    'john long', 'james long', 'robert long',
-    'john ross', 'james ross', 'robert ross',
-    'john foster', 'james foster', 'robert foster',
-    'john jimenez', 'james jimenez', 'robert jimenez',
-    
-    # === Индивидуальные изобретатели: китайские фамилии (пиньинь) ===
-    'li wei', 'li na', 'li jun', 'li yan', 'li lei', 'li jie', 'li qiang',
-    'li ming', 'li hua', 'li xiu', 'li ying', 'li fang', 'li ping', 'li jing',
-    'wang wei', 'wang na', 'wang jun', 'wang yan', 'wang lei', 'wang jie',
-    'wang qiang', 'wang ming', 'wang hua', 'wang xiu', 'wang ying',
-    'zhang wei', 'zhang na', 'zhang jun', 'zhang yan', 'zhang lei',
-    'zhang jie', 'zhang qiang', 'zhang ming', 'zhang hua', 'zhang xiu',
-    'zhang ying', 'zhang fang', 'zhang ping', 'zhang jing',
-    'liu wei', 'liu na', 'liu jun', 'liu yan', 'liu lei', 'liu jie',
-    'liu qiang', 'liu ming', 'liu hua', 'liu ying',
-    'chen wei', 'chen na', 'chen jun', 'chen yan', 'chen lei',
-    'chen jie', 'chen qiang', 'chen ming', 'chen hua', 'chen ying',
-    'yang wei', 'yang na', 'yang jun', 'yang yan', 'yang lei',
-    'yang jie', 'yang qiang', 'yang ming', 'yang hua', 'yang ying',
-    'huang wei', 'huang na', 'huang jun', 'huang yan', 'huang lei',
-    'huang jie', 'huang qiang', 'huang ming', 'huang hua',
-    'zhao wei', 'zhao na', 'zhao jun', 'zhao yan', 'zhao lei',
-    'zhao jie', 'zhao qiang', 'zhao ming', 'zhao hua',
-    'wu wei', 'wu na', 'wu jun', 'wu yan', 'wu lei',
-    'wu jie', 'wu qiang', 'wu ming', 'wu hua',
-    'zhou wei', 'zhou na', 'zhou jun', 'zhou yan', 'zhou lei',
-    'zhou jie', 'zhou qiang', 'zhou ming', 'zhou hua',
-    'xu wei', 'xu na', 'xu jun', 'xu yan', 'xu lei',
-    'xu jie', 'xu qiang', 'xu ming', 'xu hua',
-    'sun wei', 'sun na', 'sun jun', 'sun yan', 'sun lei',
-    'sun jie', 'sun qiang', 'sun ming', 'sun hua',
-    'ma wei', 'ma na', 'ma jun', 'ma yan', 'ma lei',
-    'ma jie', 'ma qiang', 'ma ming', 'ma hua',
-    'zhu wei', 'zhu na', 'zhu jun', 'zhu yan', 'zhu lei',
-    'zhu jie', 'zhu qiang', 'zhu ming', 'zhu hua',
-    'hu wei', 'hu na', 'hu jun', 'hu yan', 'hu lei',
-    'hu jie', 'hu qiang', 'hu ming', 'hu hua',
-    'guo wei', 'guo na', 'guo jun', 'guo yan', 'guo lei',
-    'guo jie', 'guo qiang', 'guo ming', 'guo hua',
-    'he wei', 'he na', 'he jun', 'he yan', 'he lei',
-    'he jie', 'he qiang', 'he ming', 'he hua',
-    'lin wei', 'lin na', 'lin jun', 'lin yan', 'lin lei',
-    'lin jie', 'lin qiang', 'lin ming', 'lin hua',
-    'gao wei', 'gao na', 'gao jun', 'gao yan', 'gao lei',
-    'gao jie', 'gao qiang', 'gao ming', 'gao hua',
-    
-    # === Индивидуальные изобретатели: общие паттерны ===
-    'individual', 'sole proprietor', 'self-employed', 'freelance', 'consultant',
-    'inventor', 'applicant', 'person', 'private', 'independent',
-    'dr.', 'prof.', 'professor', 'mr.', 'mrs.', 'ms.', 'miss',
-    'et al', 'et al.', 'and others', '& others',
-    
     # === Крупные корпорации: технологии ===
     'samsung', 'philips', 'siemens', 'medtronic', 'johnson & johnson', 'abbott',
     'roche', 'baxter', 'general electric', 'schneider', 'abb', 'honeywell',
@@ -222,10 +72,10 @@ EXCLUDE_KEYWORDS = [
     'illumina', 'thermo fisher', 'palo alto networks', 'crowdstrike', 'symantec',
     'mcafee', 'fortinet', 'shell', 'bp', 'exxonmobil', 'john deere', 'basf',
     'bayer', 'syngenta', 'monsanto', 'cargill', 'openai', 'lg electronics',
-    'ericsson', 'nokia', 'lenovo', 'kaspersky', 'xiaomi', 'oppo', 'vivo',
+    'ericsson', 'nokia', 'kaspersky', 'xiaomi', 'oppo', 'vivo', 'lenovo',
     'oneplus', 'realme', 'honor', 'meizu', 'zte', 'hisense', 'tcl', 'haier',
     'midea', 'gree', 'byd', 'geely', 'great wall motor', 'saic motor',
-    'changan', 'faaw', 'dongfeng', 'brilliance', 'chery', 'lifan',
+    'changan', 'faaw', 'dongfeng', 'brilliance', 'chery', 'lifan', 'zoom',
     
     # === Крупные корпорации: финтех/банки ===
     'bank of america', 'wells fargo', 'us bank', 'pnc', 'capital one',
@@ -506,6 +356,10 @@ def load_and_prescore(input_path: str, max_patents: int = 30) -> pd.DataFrame:
     grouped['Message'] = None
     grouped['Website'] = None
     grouped['LinkedIn'] = None
+    grouped['Funding'] = None
+    grouped['Product'] = None
+    grouped['Tech_Stack_Web'] = None
+    grouped['Recent_News'] = None
 
     grouped = grouped.sort_values('Prescore', ascending=False)
 
@@ -518,7 +372,7 @@ def build_rag_query(company_name: str, industry: str, patent_text: str) -> str:
     if industry and industry not in ("Unknown", "Other"):
         parts.append(industry)
     if patent_text:
-        parts.append(patent_text[:500])
+        parts.append(patent_text)
     return " ".join(parts)
 
 
@@ -529,8 +383,122 @@ async def ai_score_company_async(
 ) -> Dict:
     print(f"   AI Scoring: {company_name[:50]}...")
 
-    # 🔹 1. RAG-поиск релевантных кейсов (единственный источник кейсов)
-    query_for_rag = build_rag_query(company_name, industry, patent_text)
+    # 🔹 1. Web-поиск информации о компании (для получения актуальной industry)
+    research_prompt = f'''You are a Senior B2B Sales Intelligence Analyst for {INTEREXY_BASE_PROFILE}.
+Your task: Conduct deep-dive research on company: "{company_name}"
+Priority: Focus on verified, recent data (2025-2026). Flag estimates clearly.
+
+## RESEARCH OBJECTIVES
+1. Profile the company for sales qualification & case comparison
+2. Identify expansion signals, pain points, and partnership potential
+3. Extract structured, comparable metrics for our internal database
+
+## DATA TO EXTRACT (prioritize accuracy over completeness)
+
+### Core Identity
+- Company name (legal + trading), founded year, HQ location, employee count (range + source date)
+- Industry sector (primary + secondary), NAICS/SIC codes if available
+- Business model: B2B/B2C/B2G, SaaS/hardware/services, pricing model (if public)
+
+### Digital Presence
+- Official website, LinkedIn URL, Crunchbase/AngelList profiles
+- Key social channels (Twitter, YouTube, GitHub if tech-focused)
+- Traffic estimates (monthly visits, top geos) - mark as estimated
+
+### Financial & Funding Intelligence
+- Funding history: ALL rounds (date, type, amount, valuation*, lead investors, participants)
+- Total raised to date, last funding date, runway signals (if disclosed)
+- Revenue: annual revenue (range or exact), revenue growth YoY%, revenue model
+- *If valuation not disclosed, note "undisclosed" – do NOT guess
+- Investors: categorize (VC, corporate, angel), note strategic vs financial backers
+- Financial health signals: profitability status, recent layoffs/expansion, M&A activity
+
+### Product & Market Position
+- Core product/service: value proposition, key features, target customer profile
+- Differentiators: USP vs competitors, patents/IP, certifications
+- Customer segments: enterprise/SMB, verticals served, notable clients (if public)
+- Market position: leader/challenger/niche, market share estimates (if available)
+
+### Technology & Operations
+- Tech stack: frontend/backend, cloud providers, key SaaS tools (from job posts, docs, BuiltWith)
+- Integrations/APIs: key partnerships, platform compatibility
+- Hiring signals: open roles (engineering/sales/growth), locations, seniority levels
+
+### Recent Developments (last 12-18 months)
+- Product launches, major feature updates, rebranding
+- Leadership changes, new hires (C-level, sales leadership)
+- Press mentions, awards, analyst reports (Gartner, Forrester)
+- Expansion: new markets, offices, partnerships, channel programs
+- Risk signals: lawsuits, regulatory issues, negative press
+
+### Sales Intelligence (publicly available only)
+- Decision makers: names/titles of sales, marketing, tech leadership (LinkedIn-sourced)
+- Contact patterns: typical sales cycle length (if inferable from reviews/case studies)
+- Pain points: inferred from job posts ("looking to scale X"), reviews, community discussions
+- Buying triggers: events that may signal readiness (funding, expansion, tech migration)
+
+OUTPUT FORMAT:
+{{
+  "website": "official website URL",
+  "linkedin": "LinkedIn company URL",
+  "summary": "extended summary including industry, funding, product, tech stack, recent news",
+  "industry": "primary industry sector",
+  "funding": {{"total_raised_usd": int or null, "last_round": "type, amount, date"}},
+  "revenue": {{"annual_usd": "range or null"}},
+  "tech_stack": ["key technologies, frontend, backend, cloud"],
+  "recent_news": ["brief list of recent developments"]
+}}
+
+Focus on verified data (2025-2026). Return ONLY JSON, no extra text.
+'''
+    website = None
+    linkedin = None
+    web_industry = industry  # Fallback to prescore industry
+    try:
+        completion = client.chat.completions.create(
+            model="gpt-4o-mini-search-preview",
+            web_search_options={"user_location": {"type": "approximate", "approximate": {"country": "US"}}},
+            messages=[
+                {"role": "system", "content": "You must respond with valid JSON only, no additional text or explanations."},
+                {"role": "user", "content": research_prompt}
+            ]
+        )
+        web_info = completion.choices[0].message.content
+        # print(web_info)
+        try:
+            # Extract JSON from the response (GPT may add extra text)
+            web_info_stripped = web_info.strip()
+            try:
+                parsed = json.loads(web_info_stripped)
+            except json.JSONDecodeError:
+                import re
+                json_match = re.search(r'\{.*\}', web_info, re.DOTALL)
+                if json_match:
+                    json_str = json_match.group(0)
+                    parsed = json.loads(json_str)
+                else:
+                    raise json.JSONDecodeError("No JSON found", web_info, 0)
+                web_industry = parsed.get("industry", industry)
+                website = parsed.get("website")
+                linkedin = parsed.get("linkedin")
+                funding_info = parsed.get("funding", {})
+                revenue_info = parsed.get("revenue", {})
+                tech_stack_web = parsed.get("tech_stack", [])
+                recent_news = parsed.get("recent_news", [])
+                summary = parsed.get("summary", "")
+                print(f"Extracted website: {website}, linkedin: {linkedin}")
+                context_for_scoring = f"Web Summary: {summary}\nFunding: {funding_info}\nRevenue: {revenue_info}\nTech Stack: {tech_stack_web}\nNews: {recent_news}\nPatents: {patent_text[:800]}"
+            else:
+                raise json.JSONDecodeError("No JSON found", web_info, 0)
+        except json.JSONDecodeError:
+            print(f"   Web Search failed to parse JSON: {web_info[:500]}...")
+            context_for_scoring = f"Patents: {patent_text}"
+    except Exception as e:
+        print(f"   Web Search failed: {e}")
+        context_for_scoring = f"Patents only: {patent_text}"
+
+    # 🔹 2. RAG-поиск релевантных кейсов (теперь с актуальной industry из web)
+    query_for_rag = build_rag_query(company_name, web_industry, patent_text)
     try:
         rag_cases = await rag.retrieve_cases(
             query=query_for_rag,
@@ -542,13 +510,13 @@ async def ai_score_company_async(
         print(f"   RAG failed: {e}")
         rag_cases = []
 
-    # 🔹 2. Формируем компактный RAG-контекст
+    # 🔹 3. Формируем компактный RAG-контекст
     rag_context = ""
     if rag_cases:
         rag_blocks = []
         for c in rag_cases:
             title = c.get("title", "Unknown")
-            body = c.get("body", "")[:400].strip()  # 🔹 Короткие сниппеты
+            body = c.get("body", "").strip()  # 🔹 Короткие сниппеты
             industries = c.get("industry", [])
             if isinstance(industries, list):
                 industries = ", ".join(i for i in industries if i)
@@ -557,60 +525,41 @@ async def ai_score_company_async(
         rag_context = "\n".join(rag_blocks)
         print(f"   RAG: {len(rag_cases)} case(s) retrieved.")
 
-    # 🔹 3. Web-поиск информации о компании
-    research_prompt = f'Research company: "{company_name}". They managed to make patent {patent_text[:400]}. In summary return information about the company and IT-fields (application development, web-dev, ml, etc.) where the company operates. Be very strict about the company`s achievements. Return only accurate information.  Return only in JSON format: {{"summary": "concise summary", "website": "official website URL or null", "linkedin": "LinkedIn URL or null"}}'
-    website = None
-    linkedin = None
-    try:
-        completion = client.chat.completions.create(
-            model="gpt-4o-mini-search-preview",
-            web_search_options={"user_location": {"type": "approximate", "approximate": {"country": "US"}}},
-            messages=[
-                {"role": "system", "content": "You must respond with valid JSON only, no additional text or explanations."},
-                {"role": "user", "content": research_prompt}
-            ]
-        )
-        web_info = completion.choices[0].message.content
-        print(web_info)
-        try:
-            # Extract JSON from the response (GPT may add extra text)
-            start = web_info.find('{')
-            end = web_info.rfind('}') + 1
-            if start != -1 and end > start:
-                json_str = web_info[start:end]
-                parsed = json.loads(json_str)
-                summary = parsed.get("summary", "")
-                website = parsed.get("website") if parsed.get("website") and parsed.get("website") != "null" else None
-                linkedin = parsed.get("linkedin") if parsed.get("linkedin") and parsed.get("linkedin") != "null" else None
-                context_for_scoring = f"Web: {summary[:800]}\nPatents: {patent_text[:500]}" if summary else f"Patents: {patent_text[:1200]}"
-            else:
-                raise json.JSONDecodeError("No JSON found", web_info, 0)
-        except json.JSONDecodeError:
-            print(f"   Web Search failed to parse JSON: {web_info[:200]}...")
-            context_for_scoring = f"Patents: {patent_text[:1200]}"
-    except Exception as e:
-        print(f"   Web Search failed: {e}")
-        context_for_scoring = f"Patents only: {patent_text[:1200]}"
-
     # 🔹 4. Финальный промпт — ТОЛЬКО с RAG-кейсами, без загрузки всех кейсов
+    rag_section = f'RELEVANT CASES (from knowledge base, ranked by similarity):\n{rag_context}\n\n' if rag_context.strip() else ''
     score_prompt = f"""You are a Senior Sales Director at Interexy.
 
 INTEREXY PROFILE:
 {INTEREXY_BASE_PROFILE}
 
-{'RELEVANT CASES (from knowledge base, ranked by similarity):\n' + rag_context + '\n\n' if rag_context.strip() else ''}TARGET: {company_name} ({industry})
-CONTEXT: {context_for_scoring}
+found cases in by RAG system:
+
+{rag_section} 
+
+TARGET: {company_name} ({web_industry})
+WEB SEARCH CONTEXT: {context_for_scoring}
 
 TASK: Score potential for selling software dev services (1-10).
 
 RULES:
-- 1-3: No fit (university or giant or non-tech or no similarity to RAG cases)
-- 4-6: Maybe (relevant industry, but weak tech match or unclear outsourcing need)
-- 7-8: Good fit (product company in target sector, modern tech stack)
-- 9-10: Perfect fit (very similar to one of the RAG cases above)
+- 1: No fit (university, giant, non-tech, individual inventor, or no similarity to RAG cases)
+- 2-3: Poor fit (some industry match, but no clear tech development needs or RAG similarity <0.3)
+- 4-6: Maybe (relevant industry and basic tech match, but RAG similarity 0.3-0.6 or unclear outsourcing potential)
+- 7-8: Good fit (strong industry/tech match AND at least one RAG case with similarity >0.6, clear product company)
+- 9-10: Excellent fit (very similar to one or more RAG cases above with similarity >0.7, proven track record)
+
+Only score 7+ if there's a clear, specific match to at least one RAG case. Compare TARGET directly to each case's industry, tech stack, and success factors. If no strong RAG matches, score 6 or lower.
+
+If the company's total_raised_usd > 100000000 or annual revenue is very low (<70000), intentionally lower the score (e.g., 1-2) as they are too big or too small for our services. Compare matches not just in industry, but in specific field and technologies used.
+
+Base on web search in majority. Patent info is just additional information. Compare web-search info with ready RAG retrieved cases. Keep in mind that we dont partner with big tech company (Zoom, Amazon, Openai, Google) and larger.
+
+If the TARGET appears to be an individual inventor's name (e.g., personal name like 'John Doe' or 'BICKERSTAFF III GEORGE WILLIAMS') rather than a company, score 1 and set recommendation to 'Individual inventor, not a company target'. But if the individual is potentially searching for a parthership or has a lot of funding dont score him 1, Score him like other companies. 
+
+Keep in mind that Interexy is SOFTWARE DEVELOPMENT company. You need to compare is TARGET in need of SOFTWARE solutions or outsource in SOFTWARE DEVELOPMENT.
 
 Return JSON ONLY:
-{{"ai_score": N, "industry": "...", "tech_stack": ["..."], "recommendation": "..."}}"""
+{{"ai_score": N, "industry": "{web_industry}", "tech_stack": ["..."], "recommendation": "..."}}"""
 
     try:
         response = client.chat.completions.create(

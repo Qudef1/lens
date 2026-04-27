@@ -97,7 +97,8 @@ async def score_single_company_async_wrapper(idx: int, row: pd.Series) -> Dict:
     industry = row.get('Industry', '')
     patent_text = f"Titles: {row.get('Title', '')}\nAbstracts: {row.get('Abstract', '')}"
     result = await ai_score_company_async(company_name, industry, patent_text)
-    return {'idx': idx, 'ai_score': result.get('ai_score', 0), 'message': result.get('message', ''), 'industry': result.get('industry', ''), 'website': result.get('website'), 'linkedin': result.get('linkedin')}
+    print(result)
+    return {'idx': idx, 'ai_score': result.get('ai_score', 0), 'message': result.get('recommendation', ''), 'industry': result.get('industry', ''), 'website': result.get('website'), 'linkedin': result.get('linkedin')}
 
 def score_single_company(idx: int, row: pd.Series) -> Dict:
     coro = score_single_company_async_wrapper(idx, row)
@@ -176,9 +177,9 @@ if st.session_state.prescored_df is not None:
                 st.session_state.prescored_df.at[idx, 'Message'] = result['message']
                 if result['industry']:
                     st.session_state.prescored_df.at[idx, 'Industry'] = result['industry']
-                if result.get('website'):
+                if result.get('website') is not None:
                     st.session_state.prescored_df.at[idx, 'Website'] = result['website']
-                if result.get('linkedin'):
+                if result.get('linkedin') is not None:
                     st.session_state.prescored_df.at[idx, 'LinkedIn'] = result['linkedin']
                 with log_container:
                     st.write(f"   ✅ Score: {result['ai_score']}/10")
@@ -245,23 +246,31 @@ if st.session_state.prescored_df is not None:
             with col5:
                 if pd.isna(row.get('AI_score')):
                     if st.button('🤖 Analyze', key=f'btn_{idx}'):
-                        with st.spinner(f'Analyzing {row["Company"][:30]}...'):
-                            try:
+                        try:
+                            with st.spinner(f'Analyzing {row["Company"][:30]}...'):
                                 result = score_single_company(idx, row)
                                 st.session_state.prescored_df.at[idx, 'AI_score'] = result['ai_score']
                                 st.session_state.prescored_df.at[idx, 'Message'] = result['message']
                                 if result['industry']:
                                     st.session_state.prescored_df.at[idx, 'Industry'] = result['industry']
-                                if result.get('website'):
+                                if result.get('website') is not None:
                                     st.session_state.prescored_df.at[idx, 'Website'] = result['website']
-                                if result.get('linkedin'):
+                                if result.get('linkedin') is not None:
                                     st.session_state.prescored_df.at[idx, 'LinkedIn'] = result['linkedin']
+                                if result.get('funding'):
+                                    st.session_state.prescored_df.at[idx, 'Funding'] = str(result['funding'])
+                                if result.get('product'):
+                                    st.session_state.prescored_df.at[idx, 'Product'] = result['product']
+                                if result.get('tech_stack_web'):
+                                    st.session_state.prescored_df.at[idx, 'Tech_Stack_Web'] = str(result['tech_stack_web'])
+                                if result.get('recent_news'):
+                                    st.session_state.prescored_df.at[idx, 'Recent_News'] = result['recent_news']
                                 save_state()
                                 st.success(f"Score: {result['ai_score']}/10")
                                 st.rerun()
-                            except Exception as e:
-                                st.error(f"Error: {str(e)[:150]}")
-                elif row.get('Message'):
+                        except Exception as e:
+                            st.error(f"Error: {str(e)[:150]}")
+                elif row.get('Message') is None:
                     with st.popover("📝 View Message"):
                         st.write(row['Message'])
                 else:
