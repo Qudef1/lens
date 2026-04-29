@@ -16,6 +16,7 @@ import os
 import re
 import json
 import time
+import sqlite3
 import asyncio
 import argparse
 import pandas as pd
@@ -35,6 +36,44 @@ if not OPENAI_API_KEY:
 
 client = OpenAI(api_key=OPENAI_API_KEY)
 
+# SQLite database for RAG cases
+DB_PATH = 'rag_cases.db'
+
+def init_db():
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS company_rag_cases (
+            company_name TEXT PRIMARY KEY,
+            rag_cases TEXT
+        )
+    ''')
+    conn.commit()
+    conn.close()
+
+def save_rag_cases(company_name: str, rag_cases: List[Dict]):
+    init_db()
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    rag_cases_json = json.dumps(rag_cases, ensure_ascii=False)
+    cursor.execute('''
+        INSERT OR REPLACE INTO company_rag_cases (company_name, rag_cases)
+        VALUES (?, ?)
+    ''', (company_name, rag_cases_json))
+    conn.commit()
+    conn.close()
+
+def load_rag_cases(company_name: str) -> List[Dict]:
+    init_db()
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute('SELECT rag_cases FROM company_rag_cases WHERE company_name = ?', (company_name,))
+    row = cursor.fetchone()
+    conn.close()
+    if row:
+        return json.loads(row[0])
+    return []
+
 INTEREXY_BASE_PROFILE = """
 Interexy is a premium software development company (outstaffing/custom dev).
 Target Clients: Product companies (Startups, Scaleups, SMBs) in Healthcare, Fintech, Energy, AI.
@@ -45,7 +84,7 @@ COMMON_SUFFIXES = [
     'CO', 'CO.', 'CO,', 'COMPANY', 'INC', 'INC.', 'LLC', 'LLP', 'LTD', 'LTD.',
     'PLC', 'GMBH', 'AG', 'SA', 'S.A.', 'SARL', 'BV', 'PT', 'PTY', 'SP Z O O',
     'SP ZOO', 'SAS', 'S.R.L.', 'SRL', 'CORP', 'CORP.', 'CORPORATION', 'LIMITED',
-    'health', 'healthcare'
+    'health', 'healthcare','technologies', 'technology'
 ]
 
 EXCLUDE_KEYWORDS = [
@@ -76,6 +115,7 @@ EXCLUDE_KEYWORDS = [
     'oneplus', 'realme', 'honor', 'meizu', 'zte', 'hisense', 'tcl', 'haier',
     'midea', 'gree', 'byd', 'geely', 'great wall motor', 'saic motor',
     'changan', 'faaw', 'dongfeng', 'brilliance', 'chery', 'lifan', 'zoom',
+    'univ','nike'
     
     # === Крупные корпорации: финтех/банки ===
     'bank of america', 'wells fargo', 'us bank', 'pnc', 'capital one',
@@ -353,15 +393,13 @@ def load_and_prescore(input_path: str, max_patents: int = 30) -> pd.DataFrame:
     grouped = grouped.rename(columns=rename_dict)
 
     grouped['AI_score'] = None
-    grouped['Message'] = None
-    grouped['Website'] = None
-    grouped['LinkedIn'] = None
-    grouped['Funding'] = None
-    grouped['Product'] = None
-    grouped['Tech_Stack_Web'] = None
-    grouped['Recent_News'] = None
+    grouped['Recommendation'] = None
+    grouped['Lead_Message'] = None
+    grouped['rag_cases'] = None
+    grouped['web_context'] = None
 
     grouped = grouped.sort_values('Prescore', ascending=False)
+    grouped = grouped.astype({'rag_cases': object, 'web_context': object})
 
     print(f"Pre-scoring complete: {len(grouped)} companies")
     return grouped
@@ -510,6 +548,9 @@ Focus on verified data (2025-2026). Return ONLY JSON, no extra text.
         print(f"   RAG failed: {e}")
         rag_cases = []
 
+    # Save RAG cases to database
+    save_rag_cases(company_name, rag_cases)
+
     # 🔹 3. Формируем компактный RAG-контекст
     rag_context = ""
     if rag_cases:
@@ -523,7 +564,7 @@ Focus on verified data (2025-2026). Return ONLY JSON, no extra text.
             sim = c.get("similarity", 0)
             rag_blocks.append(f"- [{sim}] {title} [{industries}]: {body}")
         rag_context = "\n".join(rag_blocks)
-        print(f"   RAG: {len(rag_cases)} case(s) retrieved.")
+        print(f"   RAG: {len(rag_cases)} case(s) retrieved and saved to DB.")
 
     # 🔹 4. Финальный промпт — ТОЛЬКО с RAG-кейсами, без загрузки всех кейсов
     rag_section = f'RELEVANT CASES (from knowledge base, ranked by similarity):\n{rag_context}\n\n' if rag_context.strip() else ''
@@ -532,12 +573,12 @@ Focus on verified data (2025-2026). Return ONLY JSON, no extra text.
 INTEREXY PROFILE:
 {INTEREXY_BASE_PROFILE}
 
-found cases in by RAG system:
-
-{rag_section} 
-
 TARGET: {company_name} ({web_industry})
 WEB SEARCH CONTEXT: {context_for_scoring}
+
+found successful cases in by RAG system:
+
+{rag_section}
 
 TASK: Score potential for selling software dev services (1-10).
 
@@ -578,67 +619,76 @@ Return JSON ONLY:
 
         lead_message = ""
 
-        return {"ai_score": ai_score, "industry": result.get("industry", ""), "tech_stack": tech_stack, "recommendation": result.get("recommendation", ""), "message": lead_message, "website": website, "linkedin": linkedin}
+        return {"ai_score": ai_score, "industry": result.get("industry", ""), "tech_stack": tech_stack, "recommendation": result.get("recommendation", ""), "message": lead_message, "website": website, "linkedin": linkedin, "rag_cases": rag_cases, "web_context": context_for_scoring}
 
     except Exception as e:
         print(f"   Scoring error: {e}")
         return {"ai_score": 0, "industry": "Unknown", "tech_stack": "", "recommendation": f"Error: {str(e)[:100]}", "message": ""}
 
 
-# async def generate_lead_message_async(
-#     company_name: str,
-#     industry: str,
-#     tech_stack: str,
-#     ai_score: int,
-#     rag_cases: Optional[List[Dict]] = None,
-# ) -> str:
-#     if rag_cases:
-#         cases_context = "\n\n".join([
-#             f"- {c.get('title', 'Unknown')} [{c.get('industry', [])}]: {c.get('body', '')[:250].strip()}"
-#             for c in rag_cases
-#         ])
-#         retrieval_note = f"Relevant case(s) from our portfolio:\n{cases_context}\n\n"
-#     else:
-#         retrieval_note = ""
+async def generate_lead_message_async(
+    company_name: str,
+    industry: str,
+    tech_stack: str,
+    ai_score: int,
+    web_context: str = "",
+) -> str:
+    # Load RAG cases from database
+    rag_cases = load_rag_cases(company_name)
+    print(f"generate_lead_message_async loaded rag_cases from DB: {len(rag_cases)} items")
+    if rag_cases and len(rag_cases) > 0:
+        cases_context = "\n\n".join([
+            f"- {c.get('title', 'Unknown')} [{c.get('industry', [])}]: {c.get('body', '')[:250].strip()}"
+            for c in rag_cases
+        ])
+        retrieval_note = f"Relevant case(s) from our portfolio:\n{cases_context}\n\n"
+        print(f"Generated retrieval_note with {len(rag_cases)} cases")
+    else:
+        retrieval_note = ""
+        print("No rag_cases, retrieval_note empty")
+    print("*"*100)
+    print(retrieval_note)
+    score_band = "premium" if ai_score >= 8 else ("promising" if ai_score >= 6 else "speculative")
+    tone = "enthusiastic" if ai_score >= 8 else "warm and professional"
 
-#     score_band = "premium" if ai_score >= 8 else ("promising" if ai_score >= 6 else "speculative")
-#     tone = "enthusiastic" if ai_score >= 8 else "warm and professional"
+    prompt = f"""You are a B2B outreach writer at Interexy — a premium software development company (outstaffing/custom dev).
 
-#     prompt = f"""You are a B2B outreach writer at Interexy — a premium software development company (outstaffing/custom dev).
+Write a personalized outreach message for a potential client.
 
-# Write a personalized outreach message for a potential client.
+=== TARGET COMPANY ===
+Name: {company_name}
+Industry: {industry}
+Tech Stack: {tech_stack}
+Score Band: {score_band}
 
-# === TARGET COMPANY ===
-# Name: {company_name}
-# Industry: {industry}
-# Tech Stack: {tech_stack}
-# Score Band: {score_band}
+=== OUR SUCCESSFUL CASES ===
+{retrieval_note if retrieval_note else "No highly relevant cases found — use your general knowledge of Interexy's expertise in modern tech stacks."}
 
-# === OUR SUCCESSFUL CASES ===
-# {retrieval_note if retrieval_note else "No highly relevant cases found — use your general knowledge of Interexy's expertise in modern tech stacks."}
+=== ADDITIONAL CONTEXT ===
+{web_context}
 
-# # === MESSAGE REQUIREMENTS ===
-# 1. Friendly greeting, short and direct (under 200 words total).
-# 2. Compliment the company's work — reference their specific industry and tech achievements.
-# 3. If you have case references from above, mention them with concrete outcomes.
-#     If no strong match exists, reference a relevant Interexy specialty instead.
-# 4. End with a clear, confident offer to help bring their idea to life.
-# 5. Tone: {tone}.
+=== MESSAGE REQUIREMENTS ===
+1. Friendly greeting, short and direct (under 200 words total).
+2. Compliment the company's work — reference their specific industry and tech achievements.
+3. If you have case references from above, mention them with concrete outcomes.
+    If no strong match exists, reference a relevant Interexy specialty instead.
+4. End with a clear, confident offer to help bring their idea to life.
+5. Tone: {tone}.
 
-# === OUTPUT ===
-# Return ONLY the message text, no labels, no JSON, just the message itself."""
+=== OUTPUT ===
+Return ONLY the message text, no labels, no JSON, just the message itself."""
 
-#     try:
-#         response = client.chat.completions.create(
-#             model="gpt-4o-mini",
-#             messages=[{"role": "user", "content": prompt}],
-#             temperature=0.7,
-#             max_tokens=300,
-#         )
-#         return response.choices[0].message.content.strip()
-#     except Exception as e:
-#         print(f"   Message generation failed: {e}")
-#         return ""
+    try:
+        response = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[{"role": "user", "content": prompt}],
+            temperature=0.7,
+            max_tokens=300,
+        )
+        return response.choices[0].message.content.strip()
+    except Exception as e:
+        print(f"   Message generation failed: {e}")
+        return ""
 
 
 def ai_score_company(company_name: str, industry: str, patent_text: str) -> Dict:
@@ -650,6 +700,18 @@ def ai_score_company(company_name: str, industry: str, patent_text: str) -> Dict
         asyncio.set_event_loop(loop)
     return loop.run_until_complete(
         ai_score_company_async(company_name, industry, patent_text)
+    )
+
+
+def generate_lead_message(company_name: str, industry: str, tech_stack: str, ai_score: int, web_context: str = "") -> str:
+    """Синхронная обёртка для generate_lead_message_async."""
+    try:
+        loop = asyncio.get_running_loop()
+    except RuntimeError:
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+    return loop.run_until_complete(
+        generate_lead_message_async(company_name, industry, tech_stack, ai_score, web_context)
     )
 
 

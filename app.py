@@ -12,6 +12,7 @@ import os
 import time
 import asyncio
 import pickle
+import json
 import pandas as pd
 import streamlit as st
 from datetime import datetime
@@ -28,6 +29,7 @@ from patent_pipeline import (
     compute_prescore,
     ai_score_company_async,
     load_and_prescore as pipeline_load_and_prescore,
+    generate_lead_message,
     SECTOR_KEYWORDS,
     DATE_COLUMNS,
     EXCLUDE_KEYWORDS,
@@ -53,6 +55,10 @@ if 'prescored_df' not in st.session_state:
         try:
             with open(STATE_FILE, 'rb') as f:
                 st.session_state.prescored_df = pickle.load(f)
+            # Ensure dtypes for new columns
+            for col in ['rag_cases', 'web_context']:
+                if col in st.session_state.prescored_df.columns:
+                    st.session_state.prescored_df[col] = st.session_state.prescored_df[col].astype(object)
         except Exception as e:
             st.warning(f"Could not load saved state: {e}")
 
@@ -98,7 +104,7 @@ async def score_single_company_async_wrapper(idx: int, row: pd.Series) -> Dict:
     patent_text = f"Titles: {row.get('Title', '')}\nAbstracts: {row.get('Abstract', '')}"
     result = await ai_score_company_async(company_name, industry, patent_text)
     print(result)
-    return {'idx': idx, 'ai_score': result.get('ai_score', 0), 'message': result.get('recommendation', ''), 'industry': result.get('industry', ''), 'website': result.get('website'), 'linkedin': result.get('linkedin')}
+    return {'idx': idx, 'ai_score': result.get('ai_score', 0), 'recommendation': result.get('recommendation', ''), 'industry': result.get('industry', ''), 'website': result.get('website'), 'linkedin': result.get('linkedin')}
 
 def score_single_company(idx: int, row: pd.Series) -> Dict:
     coro = score_single_company_async_wrapper(idx, row)
@@ -171,10 +177,19 @@ if st.session_state.prescored_df is not None:
                 result = score_single_company(idx, row)
                 if 'AI_score' not in st.session_state.prescored_df.columns:
                     st.session_state.prescored_df['AI_score'] = None
-                if 'Message' not in st.session_state.prescored_df.columns:
-                    st.session_state.prescored_df['Message'] = None
+                if 'Recommendation' not in st.session_state.prescored_df.columns:
+                    st.session_state.prescored_df['Recommendation'] = None
+                if 'rag_cases' not in st.session_state.prescored_df.columns:
+                    st.session_state.prescored_df['rag_cases'] = None
+                if 'web_context' not in st.session_state.prescored_df.columns:
+                    st.session_state.prescored_df['web_context'] = None
+                st.session_state.prescored_df['rag_cases'] = st.session_state.prescored_df['rag_cases'].astype(object)
+                st.session_state.prescored_df['web_context'] = st.session_state.prescored_df['web_context'].astype(object)
+                print(f"Assigning to idx {idx}, rag_cases type {type(result.get('rag_cases', []))}")
                 st.session_state.prescored_df.at[idx, 'AI_score'] = result['ai_score']
-                st.session_state.prescored_df.at[idx, 'Message'] = result['message']
+                st.session_state.prescored_df.at[idx, 'Recommendation'] = result['recommendation']
+                st.session_state.prescored_df.at[idx, 'rag_cases'] = json.dumps(result.get('rag_cases', []), ensure_ascii=False)
+                st.session_state.prescored_df.at[idx, 'web_context'] = result.get('web_context', '')
                 if result['industry']:
                     st.session_state.prescored_df.at[idx, 'Industry'] = result['industry']
                 if result.get('website') is not None:
@@ -205,12 +220,14 @@ if st.session_state.prescored_df is not None:
     base_columns = ['Company', 'Industry', 'Patents_number', 'Prescore', 'AI_score']
     if 'Date_of_latest_publication' in df_display.columns:
         base_columns.insert(3, 'Date_of_latest_publication')
-    if 'Message' in df_display.columns:
-        base_columns.append('Message')
+    if 'Recommendation' in df_display.columns:
+        base_columns.append('Recommendation')
     if 'Website' in df_display.columns:
         base_columns.append('Website')
     if 'LinkedIn' in df_display.columns:
         base_columns.append('LinkedIn')
+    if 'Lead_Message' in df_display.columns:
+        base_columns.append('Lead_Message')
     for col in base_columns:
         if col not in df_display.columns:
             df_display[col] = None
@@ -221,8 +238,10 @@ if st.session_state.prescored_df is not None:
         column_config={
             "AI_score": st.column_config.NumberColumn("AI Score", format="%d/10", min_value=0, max_value=10),
             "Prescore": st.column_config.NumberColumn("Pre-Score", format="%d"),
+            "Recommendation": st.column_config.TextColumn("Recommendation"),
             "Website": st.column_config.LinkColumn("Website"),
             "LinkedIn": st.column_config.LinkColumn("LinkedIn"),
+            "Lead_Message": st.column_config.TextColumn("Lead Message"),
         }
     )
 
@@ -250,7 +269,9 @@ if st.session_state.prescored_df is not None:
                             with st.spinner(f'Analyzing {row["Company"][:30]}...'):
                                 result = score_single_company(idx, row)
                                 st.session_state.prescored_df.at[idx, 'AI_score'] = result['ai_score']
-                                st.session_state.prescored_df.at[idx, 'Message'] = result['message']
+                                st.session_state.prescored_df.at[idx, 'Recommendation'] = result['recommendation']
+                                st.session_state.prescored_df.at[idx, 'rag_cases'] = json.dumps(result.get('rag_cases', []), ensure_ascii=False)
+                                st.session_state.prescored_df.at[idx, 'web_context'] = result.get('web_context', '')
                                 if result['industry']:
                                     st.session_state.prescored_df.at[idx, 'Industry'] = result['industry']
                                 if result.get('website') is not None:
@@ -270,11 +291,21 @@ if st.session_state.prescored_df is not None:
                                 st.rerun()
                         except Exception as e:
                             st.error(f"Error: {str(e)[:150]}")
-                elif row.get('Message') is None:
-                    with st.popover("📝 View Message"):
-                        st.write(row['Message'])
-                else:
-                    st.success("✓")
+                elif pd.notna(row.get('AI_score')):
+                    if row.get('Recommendation'):
+                        with st.popover("📝 View Recommendation"):
+                            st.write(row['Recommendation'])
+                    if pd.isna(row.get('Lead_Message')):
+                        if st.button('Generate Lead Message', key=f'msg_{idx}'):
+                            try:
+                                message = generate_lead_message(row['Company'], row['Industry'], row.get('Tech_Stack_Web', ''), int(row['AI_score']), st.session_state.prescored_df.at[idx, 'web_context'] or '')
+                                st.session_state.prescored_df.at[idx, 'Lead_Message'] = message
+                                st.success("Lead message generated!")
+                                st.rerun()
+                            except Exception as e:
+                                st.error(f"Error generating message: {str(e)[:150]}")
+                    else:
+                        st.success("✓ Message ready")
 
     st.markdown('---')
     st.subheader('Export Results')
