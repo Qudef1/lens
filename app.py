@@ -118,19 +118,24 @@ def save_all_state():
         if st.session_state.all_processed_df is None:
             st.session_state.all_processed_df = st.session_state.prescored_df.copy()
         else:
-            # Merge new processed companies into all_processed_df
             all_df = st.session_state.all_processed_df
             new_df = st.session_state.prescored_df
-            # For companies in new_df that have AI_score, update all_df
-            update_mask = new_df['AI_score'].notna()
-            update_companies = new_df[update_mask]['Company']
-            for col in all_df.columns:
-                if col in new_df.columns:
-                    all_df.loc[all_df['Company'].isin(update_companies), col] = new_df.loc[new_df['Company'].isin(update_companies), col]
-            # Add new companies
+            cols_to_update = ['AI_score', 'Recommendation', 'Industry', 'Website', 'LinkedIn', 'rag_cases', 'web_context', 'Lead_Message']
+            for col in cols_to_update:
+                if col in new_df.columns and col in all_df.columns:
+                    # Get processed companies from new_df
+                    processed = new_df[new_df['AI_score'].notna()].copy()
+                    for comp in processed['Company']:
+                        new_val = processed.loc[processed['Company'] == comp, col].iloc[0]
+                        mask = all_df['Company'] == comp
+                        if mask.any() and pd.notna(new_val):
+                            all_df.loc[mask, col] = new_val
+            # Add new companies (those not in all_df)
             new_companies = new_df[~new_df['Company'].isin(all_df['Company'])]
             if not new_companies.empty:
                 st.session_state.all_processed_df = pd.concat([all_df, new_companies], ignore_index=True)
+            else:
+                st.session_state.all_processed_df = all_df
         with open(ALL_STATE_FILE, 'wb') as f:
             pickle.dump(st.session_state.all_processed_df, f)
 
@@ -199,10 +204,14 @@ if st.sidebar.button('Run Pre-scoring', type='primary'):
                     all_df = st.session_state.all_processed_df
                     merge_cols = ['AI_score', 'Recommendation', 'Industry', 'Website', 'LinkedIn', 'rag_cases', 'web_context', 'Lead_Message']
                     for col in merge_cols:
-                        if col in all_df.columns:
-                            merged = st.session_state.prescored_df.merge(all_df[['Company', col]], on='Company', how='left', suffixes=('', '_all'))
-                            if f'{col}_all' in merged.columns:
-                                st.session_state.prescored_df[col] = merged[f'{col}_all'].combine_first(merged[col])
+                        if col in all_df.columns and col in st.session_state.prescored_df.columns:
+                            # Build lookup dict for companies in all_processed_df
+                            lookup = all_df.set_index('Company')[col].to_dict()
+                            # Update prescored_df for companies that exist in lookup and have no value
+                            for comp in st.session_state.prescored_df['Company']:
+                                curr_val = st.session_state.prescored_df.loc[st.session_state.prescored_df['Company'] == comp, col].iloc[0]
+                                if comp in lookup and (pd.isna(curr_val) or curr_val is None):
+                                    st.session_state.prescored_df.loc[st.session_state.prescored_df['Company'] == comp, col] = lookup[comp]
                 save_state()
                 st.success(f'Pre-scoring complete! Found {len(st.session_state.prescored_df)} companies')
             except Exception as e:
@@ -433,14 +442,6 @@ if st.session_state.prescored_df is not None:
                                     st.session_state.prescored_df.at[idx, 'Website'] = result['website']
                                 if result.get('linkedin') is not None:
                                     st.session_state.prescored_df.at[idx, 'LinkedIn'] = result['linkedin']
-                                if result.get('funding'):
-                                    st.session_state.prescored_df.at[idx, 'Funding'] = str(result['funding'])
-                                if result.get('product'):
-                                    st.session_state.prescored_df.at[idx, 'Product'] = result['product']
-                                if result.get('tech_stack_web'):
-                                    st.session_state.prescored_df.at[idx, 'Tech_Stack_Web'] = str(result['tech_stack_web'])
-                                if result.get('recent_news'):
-                                    st.session_state.prescored_df.at[idx, 'Recent_News'] = result['recent_news']
                                 save_all_state()
                                 st.success(f"Score: {result['ai_score']}/10")
                                 st.rerun()
